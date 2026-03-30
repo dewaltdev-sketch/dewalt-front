@@ -79,7 +79,7 @@ export default function ProductSpecsForDesktop({
                           className="border-line-color border-b pb-3 last:border-0"
                         >
                           <div className="text-text-secondary mb-1 text-sm">
-                            {label}:
+                            {label}
                           </div>
                           <div className="text-dark-secondary-100 flex items-baseline gap-1 text-sm">
                             <span>{value}</span>

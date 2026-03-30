@@ -42,9 +42,10 @@ export default function ProductInfoTab({
       case 1:
         return (
           <div className="bg-background rounded-lg p-4 md:min-h-[160px]">
-            <p className="text-dark-secondary-100 whitespace-pre-line">
-              {description}
-            </p>
+            <p
+              className="text-dark-secondary-100 whitespace-pre-line [&_*]:!leading-[calc(1/.75)]"
+              dangerouslySetInnerHTML={{ __html: description }}
+            ></p>
           </div>
         );
       case 2:

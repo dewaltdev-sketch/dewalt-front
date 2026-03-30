@@ -5,6 +5,7 @@ import { cn } from "@/lib/utils";
 import { CompareButton } from "@/features/products/compare/components/compareButton";
 import { AddSingleItemToCart } from "../../cart/components/addToCart";
 import { generateSlug } from "@/lib/utils/slugify";
+import ProductDescription from "./productDescription";
 
 export default function ProductCard({
   product,
@@ -72,13 +73,11 @@ export default function ProductCard({
                 "md:h-9.5 md:text-sm md:font-bold": size === "sm",
               }
             )}
-            title={`${name} ${code}`}
+            title={`${"product"} ${code}`}
           >
-            {name} {code}
+            <span dangerouslySetInnerHTML={{ __html: name }}></span> {code}
           </Link>
-          <p className="text-text-secondary mb-1 line-clamp-2 text-xs md:mb-3 md:line-clamp-3">
-            {description}
-          </p>
+          <ProductDescription description={description} />
 
           {/* Price */}
           <div
