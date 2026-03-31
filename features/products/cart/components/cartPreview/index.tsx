@@ -78,7 +78,8 @@ export default function CartPreview() {
                           onClick={() => setIsOpen(false)}
                           className="text-dark-secondary-100 hover:text-primary line-clamp-2 text-xs font-semibold transition-colors"
                         >
-                          {item.product.name} {item.product.code}
+                          {item.product.name}{" "}
+                          {item.product.finaCode || item.product.code}
                         </Link>
                         <div className="flex items-center justify-between">
                           <div className="flex items-center gap-2">

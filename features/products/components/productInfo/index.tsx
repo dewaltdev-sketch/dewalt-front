@@ -17,6 +17,7 @@ export default function ProductInfo({ product }: { product: Product }) {
     name,
     price,
     code,
+
     _id,
     rating,
     reviewCount,
@@ -31,8 +32,13 @@ export default function ProductInfo({ product }: { product: Product }) {
   return (
     <div className="m-auto w-full max-w-[410px] space-y-4 md:m-0 md:max-w-none">
       {/* Product Title */}
-      <h1 className="text-dark-secondary-100 font-bpg-web-002-caps text-2xl md:text-3xl">
-        {name}
+      <h1 className="text-dark-secondary-100 font-bpg-web-002-caps text-2xl md:text-2xl">
+        {name}{" "}
+        {finaCode && (
+          <span className="text-dark-secondary-100 text-[28px] md:text-[28px]">
+            {finaCode}
+          </span>
+        )}
       </h1>
 
       {/* Rating and Compare */}

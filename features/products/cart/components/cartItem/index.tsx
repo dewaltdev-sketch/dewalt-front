@@ -74,7 +74,7 @@ export default function CartItem({ item }: CartItemProps) {
             href={`/products/${generateSlug(product.name, product._id)}`}
             className="text-dark-secondary-100 hover:text-primary mb-1 block text-sm font-bold transition-colors md:max-w-[200px] md:text-sm"
           >
-            {product.name} {product.code}
+            {product.name} {product.finaCode || product.code}
           </Link>
 
           {/* Price */}

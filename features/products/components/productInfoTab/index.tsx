@@ -67,12 +67,14 @@ export default function ProductInfoTab({
               {specs.map((spec, index) => (
                 <div
                   key={index}
-                  className="grid grid-cols-1 gap-4 p-2 transition-colors hover:bg-gray-50/50 md:grid-cols-[200px_1fr]"
+                  className="grid grid-cols-2 gap-4 p-2 transition-colors hover:bg-gray-50/50 md:grid-cols-[200px_1fr]"
                 >
-                  <div className="text-text-secondary font-medium md:font-normal">
+                  <div className="text-text-secondary text-sm font-medium md:text-base md:font-normal">
                     {spec.label}
                   </div>
-                  <div className="text-dark-secondary-100">{spec.value}</div>
+                  <div className="text-dark-secondary-100 text-sm md:text-base">
+                    {spec.value}
+                  </div>
                 </div>
               ))}
             </div>

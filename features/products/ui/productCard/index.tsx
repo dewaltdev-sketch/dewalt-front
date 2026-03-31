@@ -19,6 +19,7 @@ export default function ProductCard({
   const {
     image,
     name,
+    finaCode,
     code,
     description,
     price,
@@ -41,7 +42,7 @@ export default function ProductCard({
         {/* Discount Badge */}
         {discount ? (
           <div className="bg-discount-BG text-discount-text absolute top-2 left-2 z-10 rounded px-1 py-2 text-xs font-normal">
-            {discount}%
+            -{discount}%
           </div>
         ) : null}
 
@@ -75,7 +76,8 @@ export default function ProductCard({
             )}
             title={`${"product"} ${code}`}
           >
-            <span dangerouslySetInnerHTML={{ __html: name }}></span> {code}
+            <span dangerouslySetInnerHTML={{ __html: name }}></span>{" "}
+            {finaCode || code}
           </Link>
           <ProductDescription description={description} />
 
@@ -92,9 +94,11 @@ export default function ProductCard({
                 "md:mb-4": size === "sm",
               })}
             >
-              <span className="text-dark-secondary-100">{price} GEL</span>
+              <span className="text-dark-secondary-100 font-bold">
+                {price} GEL
+              </span>
               {originalPrice && originalPrice > price ? (
-                <span className="text-text-secondary text-xs line-through">
+                <span className="text-text-secondary text-medium line-through">
                   {product.originalPrice} GEL
                 </span>
               ) : null}

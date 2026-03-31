@@ -15,7 +15,7 @@ interface CompareProductCardProps {
 export default function CompareProductCard({
   product,
 }: CompareProductCardProps) {
-  const { image, name, code, price, originalPrice, _id } = product;
+  const { image, name, code, price, originalPrice, _id, finaCode } = product;
 
   return (
     <div className="relative min-w-[220px] shrink-0 md:min-w-[240px]">
@@ -42,7 +42,7 @@ export default function CompareProductCard({
             href={`/products/${generateSlug(name, _id)}`}
             className="text-dark-secondary-100 hover:text-primary mb-2 h-12 text-sm font-bold transition-colors"
           >
-            {name} {code}
+            {name} {finaCode || code}
           </Link>
 
           {/* Price */}
@@ -50,11 +50,11 @@ export default function CompareProductCard({
             <span className="text-dark-secondary-100 text-lg font-semibold">
               {price} GEL
             </span>
-            {originalPrice && (
-              <span className="text-text-secondary text-sm line-through">
+            {originalPrice ? (
+              <span className="text-text-secondary text-medium line-through">
                 {originalPrice} GEL
               </span>
-            )}
+            ) : null}
           </div>
 
           {/* Add to Cart Button */}
