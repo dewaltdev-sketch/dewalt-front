@@ -29,7 +29,7 @@ export default function AddToCart({ product }: { product: Product }) {
     <Button
       size="md"
       className="w-full flex-1 sm:flex-initial md:w-auto"
-      disabled={!product.inStock || maxQuantity === 0}
+      disabled={maxQuantity === 0}
       onClick={handleAddToCart}
     >
       <BucketIcon className="h-6 w-6" />
