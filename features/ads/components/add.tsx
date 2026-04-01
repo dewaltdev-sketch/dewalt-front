@@ -76,7 +76,7 @@ export default function Add({
           {ad ? (
             <AdImage
               ad={ad}
-              sizes="(max-width: 768px) 100vw, 224px"
+              sizes="(max-width: 1270px) 100vw, 1470px"
               priority
               className="rounded-lg"
             />
