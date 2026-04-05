@@ -4,7 +4,15 @@ import Breadcrumb from "@/components/ui/breadcrumb";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
 
-export default function AboutPage() {
+export default function AboutPage({
+  title,
+  subtitle,
+  content,
+}: {
+  title?: string;
+  subtitle?: string;
+  content?: string;
+}) {
   const t = useTranslations();
 
   const breadcrumbItems = [
@@ -39,24 +47,26 @@ export default function AboutPage() {
           {/* Content */}
           <div className="customContainer md:pbs-16 relative z-10 flex h-full min-h-[400px] flex-col justify-start pt-50 md:min-h-[600px] md:pt-20">
             <div className="max-w-2xl md:pt-16">
-              <h1 className="text-primary font-bpg-web-002-caps mb-2 text-center text-2xl md:text-left md:text-3xl">
-                &quot;EAGLE POWER TOOLS&quot;
-              </h1>
-              <h2 className="text-primary font-bpg-web-002-caps mb-4 text-center md:text-left">
-                {t("about.officialPartner")}
-              </h2>
-              <div className="text-white">
-                <p className="text-neutral mb-1 text-sm leading-relaxed md:text-sm">
-                  DEWALT x McLaren
-                </p>
-                <p className="text-neutral text-sm leading-relaxed md:text-sm">
-                  DEWALT-მა და McLaren Formula 1-მა ერთად შექმნეს შეზღუდული
-                  რაოდენობის კოლექცია, რომელიც აერთიანებს DEWALT-ის საიმედოობას
-                  და McLaren-ის მაღალშესრულებადობას. ეს კოლექცია შექმნილია
-                  პროფესიონალებისთვის, რომლებიც საჭიროებენ უკიდურეს პირობებში
-                  მუშაობის უნარს, სადაც წამები მნიშვნელოვანია.
-                </p>
-              </div>
+              {title?.trim() ? (
+                <h1 className="text-primary font-bpg-web-002-caps mb-2 text-center text-2xl md:text-left md:text-3xl">
+                  {title}
+                </h1>
+              ) : null}
+              {subtitle?.trim() ? (
+                <h2 className="text-primary font-bpg-web-002-caps mb-4 text-center md:text-left">
+                  {subtitle}
+                </h2>
+              ) : null}
+              {content?.trim() ? (
+                <div
+                  className="text-neutral prose prose-invert max-w-none text-sm leading-relaxed [&_p]:mb-3 [&_ul]:pl-5 [&_ol]:pl-5"
+                  dangerouslySetInnerHTML={{ __html: content }}
+                />
+              ) : (
+                <div className="text-neutral text-sm leading-relaxed">
+                  {t("about.officialPartner")}
+                </div>
+              )}
             </div>
           </div>
         </div>

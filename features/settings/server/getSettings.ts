@@ -17,6 +17,9 @@ export interface SettingsApi {
   contactEmail?: string;
   contactFacebook?: string;
   contactAddress?: LocalizedText;
+  aboutTitle?: LocalizedText;
+  aboutSubtitle?: LocalizedText;
+  aboutContent?: LocalizedText;
   freeDeliveryEnabled: boolean;
   deliveryRegionFreeOver: number;
   deliveryRegionPrice: number;
