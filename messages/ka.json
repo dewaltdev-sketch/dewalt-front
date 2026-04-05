@@ -142,7 +142,8 @@
     "outOfStock": "მარაგში არ არის",
     "delivery": "მიწოდება",
     "warranty": "გარანტია",
-    "quantity": "რაოდენობა"
+    "quantity": "რაოდენობა",
+    "orderOnly": "მხოლოდ შეკვეთითი"
   },
   "rating": {
     "submitSuccess": "შეფასება წარმატებით დაემატა!",

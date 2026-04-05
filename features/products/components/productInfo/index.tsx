@@ -27,6 +27,7 @@ export default function ProductInfo({ product }: { product: Product }) {
     quantity,
     slug,
     originalPrice,
+    orderOnly,
   } = product;
 
   return (
@@ -84,7 +85,12 @@ export default function ProductInfo({ product }: { product: Product }) {
       </div>
 
       {/* Quantity Selector and Add to Cart */}
-      <AddToCart product={product} />
+      {!orderOnly ? <AddToCart product={product} /> : null}
+      {orderOnly ? (
+        <div className="text-dark-secondary-100 text-sm">
+          {t("product.orderOnly")}
+        </div>
+      ) : null}
 
       {/* Additional Information */}
       <div className="border-line-color flex flex-wrap gap-2 space-y-3 border-t pt-4 md:gap-4">

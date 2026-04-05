@@ -1,7 +1,11 @@
+"use client";
+
 import Image from "next/image";
 import { Link } from "@/i18n/navigation";
+import { useTranslations } from "next-intl";
 import type { Product } from "../../types";
 import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 import { CompareButton } from "@/features/products/compare/components/compareButton";
 import { AddSingleItemToCart } from "../../cart/components/addToCart";
 import { generateSlug } from "@/lib/utils/slugify";
@@ -16,6 +20,7 @@ export default function ProductCard({
   size?: "sm" | "md";
   className?: string;
 }) {
+  const t = useTranslations();
   const {
     image,
     name,
@@ -25,8 +30,10 @@ export default function ProductCard({
     price,
     originalPrice,
     discount,
+    orderOnly,
     _id,
   } = product;
+  const productHref = `/products/${generateSlug(name, _id)}`;
 
   return (
     <div
@@ -52,7 +59,7 @@ export default function ProductCard({
         </div>
 
         {/* Product Image */}
-        <Link href={`/products/${generateSlug(name, _id)}`} className="block">
+        <Link href={productHref} className="block">
           <div className="relative mb-3 aspect-square h-[190px] w-full overflow-hidden">
             <Image
               src={image}
@@ -67,7 +74,7 @@ export default function ProductCard({
         {/* Product Info */}
         <div className="flex flex-1 flex-col">
           <Link
-            href={`/products/${generateSlug(name, _id)}`}
+            href={productHref}
             className={cn(
               "text-dark-secondary-100 hover:text-primary mb-2 [display:-webkit-box] h-10.5 overflow-hidden text-sm wrap-break-word text-ellipsis transition-colors [-webkit-box-orient:vertical] [-webkit-line-clamp:2] md:h-11.5 md:text-base",
               {
@@ -105,7 +112,13 @@ export default function ProductCard({
             </div>
 
             {/* Add to Cart Button */}
-            <AddSingleItemToCart product={product} size={size} />
+            {orderOnly ? (
+              <Button asChild size="md" className="w-full">
+                <Link href={productHref}>{t("product.orderOnly")}</Link>
+              </Button>
+            ) : (
+              <AddSingleItemToCart product={product} size={size} />
+            )}
           </div>
         </div>
       </div>

@@ -15,6 +15,7 @@ export interface Product {
   price: number;
   originalPrice?: number;
   discount?: number;
+  orderOnly?: boolean;
   inStock: boolean;
   quantity: number;
   rating: number;

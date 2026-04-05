@@ -140,7 +140,8 @@
     "inStock": "In Stock",
     "outOfStock": "Out of Stock",
     "warranty": "Warranty",
-    "quantity": "Quantity"
+    "quantity": "Quantity",
+    "orderOnly": "Order Only"
   },
   "rating": {
     "submitSuccess": "Rating submitted successfully!",
