@@ -115,7 +115,7 @@ export default function DetailsSlider({
             src={images[selectedIndex] || images[0]}
             alt={productName}
             fill
-            className="object-cover p-4"
+            className="object-contain p-4"
             sizes="(max-width: 768px) 100vw, 50vw"
             priority
           />
