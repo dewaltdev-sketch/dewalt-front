@@ -4,6 +4,7 @@ import LocationIcon from "@/components/icons/locationIcon";
 import PhoneIcon from "@/components/icons/phoneIcon";
 import EnvelopIcon from "@/components/icons/envelopIcon";
 import FbIcon from "@/components/icons/fbIcon";
+import InstagramIcon from "@/components/icons/instagramIcon";
 import Breadcrumb from "@/components/ui/breadcrumb";
 import { useTranslations } from "next-intl";
 
@@ -12,6 +13,7 @@ type ContactInfo = {
   phone2?: string | null;
   email: string;
   facebookUrl: string;
+  instagramUrl?: string;
   address: string;
 };
 
@@ -27,6 +29,7 @@ export default function ContactPage({ contact }: { contact: ContactInfo }) {
   const phone2 = contact.phone2?.trim();
   const email = contact.email?.trim();
   const facebookUrl = contact.facebookUrl?.trim();
+  const instagramUrl = contact.instagramUrl?.trim();
   const address = contact.address?.trim();
 
   return (
@@ -109,18 +112,33 @@ export default function ContactPage({ contact }: { contact: ContactInfo }) {
           <h2 className="text-dark-secondary-100 mb-6 text-xl font-semibold">
             {t("contact.followUs")}
           </h2>
-          <div className="flex justify-center">
-            <a
-              href={facebookUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="group bg-background hover:border-primary flex items-center gap-3 rounded-lg border border-gray-200 px-6 py-4 transition-all hover:shadow-lg"
-            >
-              <FbIcon />
-              <span className="text-dark-secondary-100 group-hover:text-primary font-medium">
-                Facebook
-              </span>
-            </a>
+          <div className="flex flex-wrap justify-center gap-4">
+            {facebookUrl ? (
+              <a
+                href={facebookUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group bg-background hover:border-primary flex items-center gap-3 rounded-lg border border-gray-200 px-6 py-4 transition-all hover:shadow-lg"
+              >
+                <FbIcon />
+                <span className="text-dark-secondary-100 group-hover:text-primary font-medium">
+                  Facebook
+                </span>
+              </a>
+            ) : null}
+            {instagramUrl ? (
+              <a
+                href={instagramUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group bg-background hover:border-primary flex items-center gap-3 rounded-lg border border-gray-200 px-6 py-4 transition-all hover:shadow-lg"
+              >
+                <InstagramIcon />
+                <span className="text-dark-secondary-100 group-hover:text-primary font-medium">
+                  Instagram
+                </span>
+              </a>
+            ) : null}
           </div>
         </div>
 

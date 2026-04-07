@@ -5,6 +5,7 @@ import PhoneIcon from "../icons/phoneIcon";
 import EnvelopIcon from "../icons/envelopIcon";
 import LocationIcon from "../icons/locationIcon";
 import FbIcon from "../icons/fbIcon";
+import InstagramIcon from "../icons/instagramIcon";
 import MastercardLogo from "@/public/mastercard.png";
 import VisaLogo from "@/public/visa.png";
 import { BrandApi } from "@/features/categories/server/getBrands";
@@ -49,6 +50,7 @@ export default async function Footer({ brands }: { brands: BrandApi[] }) {
   // const phone2 = settings?.contactPhone2?.trim();
   const email = settings?.contactEmail?.trim() || "ksanisale@dewalt.com";
   const facebook = settings?.contactFacebook?.trim() || "https://facebook.com";
+  const instagram = settings?.contactInstagram?.trim() || "";
   const address =
     settings?.contactAddress?.[locale]?.trim() || t("footer.address");
   const messengerLink = getMessengerLink(facebook);
@@ -189,6 +191,19 @@ export default async function Footer({ brands }: { brands: BrandApi[] }) {
                     {t("footer.followUs")}
                   </a>
                 </li>
+                {instagram ? (
+                  <li className="flex items-center gap-2">
+                    <InstagramIcon />
+                    <a
+                      href={instagram}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-neutral hover:text-primary text-xs transition-colors"
+                    >
+                      {t("footer.followUs")}
+                    </a>
+                  </li>
+                ) : null}
               </ul>
             </div>
           </div>

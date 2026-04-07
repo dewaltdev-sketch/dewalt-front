@@ -10,10 +10,13 @@ export default async function Page() {
   const phone2 = settings?.contactPhone2?.trim() || null;
   const email = settings?.contactEmail?.trim() || "";
   const facebookUrl = settings?.contactFacebook?.trim() || "";
+  const instagramUrl = settings?.contactInstagram?.trim() || "";
 
   const address = settings?.contactAddress?.[locale]?.trim() || "";
 
   return (
-    <ContactPage contact={{ phone1, phone2, email, facebookUrl, address }} />
+    <ContactPage
+      contact={{ phone1, phone2, email, facebookUrl, instagramUrl, address }}
+    />
   );
 }

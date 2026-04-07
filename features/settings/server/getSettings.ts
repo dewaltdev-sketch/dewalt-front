@@ -16,6 +16,7 @@ export interface SettingsApi {
   contactPhone2?: string;
   contactEmail?: string;
   contactFacebook?: string;
+  contactInstagram?: string;
   contactAddress?: LocalizedText;
   aboutTitle?: LocalizedText;
   aboutSubtitle?: LocalizedText;
