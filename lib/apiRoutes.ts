@@ -14,6 +14,9 @@ export const API_ROUTES = {
   // Settings
   SETTINGS: "/settings",
 
+  // Terms
+  TERMS: "/terms",
+
   // Banner Slider
   BANNER_SLIDER: "/banner-slider",
 

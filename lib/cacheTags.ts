@@ -13,6 +13,9 @@ export const CACHE_TAGS = {
   settings: {
     all: ["settings"] as const,
   },
+  terms: {
+    all: ["terms"] as const,
+  },
   bannerCarousel: {
     all: ["banner-carousel"] as const,
   },
