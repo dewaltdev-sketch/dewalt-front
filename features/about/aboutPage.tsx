@@ -1,6 +1,7 @@
 "use client";
 
 import Breadcrumb from "@/components/ui/breadcrumb";
+import { normalizeRichTextHtml } from "@/lib/normalizeRichTextHtml";
 import { useTranslations } from "next-intl";
 
 export default function AboutPage({
@@ -43,8 +44,10 @@ export default function AboutPage({
               ) : null}
               {content?.trim() ? (
                 <div
-                  className="text-neutral prose prose-invert max-w-none text-sm leading-relaxed wrap-break-word **:wrap-break-word [&_ol]:pl-5 [&_p]:mb-3 [&_ul]:pl-5"
-                  dangerouslySetInnerHTML={{ __html: content }}
+                  className="text-neutral prose prose-invert max-w-none text-sm leading-relaxed wrap-break-word **:wrap-break-word [&_ol]:ml-5 [&_ol]:list-decimal [&_ol]:list-outside [&_p]:mb-3 [&_ul]:ml-5 [&_ul]:list-disc [&_ul]:list-outside"
+                  dangerouslySetInnerHTML={{
+                    __html: normalizeRichTextHtml(content),
+                  }}
                 />
               ) : (
                 <div className="text-neutral text-sm leading-relaxed">

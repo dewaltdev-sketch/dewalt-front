@@ -1,35 +1,25 @@
-"use client";
-
-import { brandsInfo } from "./brandInfo";
 import Image from "next/image";
 import classNames from "classnames";
 import { Button } from "@/components/ui/button";
 import { Link } from "@/i18n/navigation";
-import { useLocale } from "next-intl";
+import { normalizeRichTextHtml } from "@/lib/normalizeRichTextHtml";
+import { BRAND_STATIC_INFO, type BrandKey } from "./brandInfo";
+import type { BrandTextBlock } from "./server/getBrandContent";
 
 interface BrandPageProps {
-  brandName: string;
+  brandKey: BrandKey;
   brandSlug: string;
+  lang: "ka" | "en";
+  content?: BrandTextBlock;
 }
 
-export default function BrandPage({ brandName, brandSlug }: BrandPageProps) {
-  const locale = useLocale();
-  const lang = locale === "ka" ? "ka" : "en";
-  const brandInfo = brandsInfo[brandName];
-
-  if (!brandInfo) {
-    return (
-      <div className="min-h-screen py-20">
-        <div className="customContainer">
-          <div className="text-dark-secondary-100 text-center">
-            <p className="text-lg">
-              {lang === "ka" ? "ბრენდი ვერ მოიძებნა." : "Brand not found."}
-            </p>
-          </div>
-        </div>
-      </div>
-    );
-  }
+export default function BrandPage({
+  brandKey,
+  brandSlug,
+  lang,
+  content,
+}: BrandPageProps) {
+  const brandInfo = BRAND_STATIC_INFO[brandKey];
 
   return (
     <div className="min-h-screen py-10 pt-15">
@@ -38,12 +28,12 @@ export default function BrandPage({ brandName, brandSlug }: BrandPageProps) {
         <div className="mb-10 flex flex-col items-center gap-6 md:mb-12">
           <div className="flex items-center justify-center pt-8">
             <Image
-              src={brandInfo.logo}
+              src={brandInfo.pageLogo}
               alt={brandInfo.name}
               width={200}
               height={92}
               className={classNames("h-16 w-auto md:h-24", {
-                "brightness-100 grayscale": brandInfo.name === "DeWalt",
+                "brightness-100 grayscale": brandInfo.slug === "dewalt",
               })}
             />
           </div>
@@ -54,39 +44,13 @@ export default function BrandPage({ brandName, brandSlug }: BrandPageProps) {
 
         {/* Brand Information Section */}
         <div className="mx-auto max-w-4xl space-y-8 px-5 md:px-0">
-          {/* Description */}
           <div className="space-y-4">
-            <h2 className="font-bpg-web-002-caps text-dark-secondary-100 text-xl md:text-2xl">
-              {lang === "ka" ? "ბრენდის შესახებ" : "About the brand"}
-            </h2>
-            <p className="text-dark-secondary-100 leading-7 md:text-base">
-              {brandInfo.description[lang]}
-            </p>
-          </div>
-
-          {/* History */}
-          <div className="space-y-4">
-            <h2 className="font-bpg-web-002-caps text-dark-secondary-100 text-xl md:text-2xl">
-              {lang === "ka" ? "ისტორია" : "History"}
-            </h2>
-            <p className="text-dark-secondary-100 leading-7 md:text-base">
-              {brandInfo.history[lang]}
-            </p>
-          </div>
-
-          {/* Key Features */}
-          <div className="space-y-4">
-            <h2 className="font-bpg-web-002-caps text-dark-secondary-100 text-xl md:text-2xl">
-              {lang === "ka" ? "ძირითადი მახასიათებლები" : "Key features"}
-            </h2>
-            <ul className="text-dark-secondary-100 space-y-2 md:text-base">
-              {brandInfo.keyFeatures.map((feature, index) => (
-                <li key={index} className="flex items-start gap-2">
-                  <span className="text-primary mt-1.5">•</span>
-                  <span className="leading-7">{feature[lang]}</span>
-                </li>
-              ))}
-            </ul>
+            <div
+              className="text-dark-secondary-100 prose max-w-none leading-7 md:text-base [&_ol]:ml-5 [&_ol]:list-decimal [&_ol]:list-outside [&_ul]:ml-5 [&_ul]:list-disc [&_ul]:list-outside"
+              dangerouslySetInnerHTML={{
+                __html: normalizeRichTextHtml(content?.aboutContent?.[lang]),
+              }}
+            />
           </div>
 
           {/* Call to Action Button */}

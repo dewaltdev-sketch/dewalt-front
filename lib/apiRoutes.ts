@@ -17,6 +17,9 @@ export const API_ROUTES = {
   // Terms
   TERMS: "/terms",
 
+  // Brand content
+  BRAND_CONTENT: "/brand-content",
+
   // Banner Slider
   BANNER_SLIDER: "/banner-slider",
 

@@ -409,6 +409,9 @@
       "retry": "Try Again"
     }
   },
+  "brands": {
+    "title": "Brands"
+  },
   "errors": {
     "generic": {
       "title": "Something went wrong",

@@ -1,4 +1,6 @@
 import BrandPage from "@/features/brands/brandPage";
+import { BRAND_KEY_BY_SLUG } from "@/features/brands/brandInfo";
+import { getBrandContent } from "@/features/brands/server/getBrandContent";
 import { notFound } from "next/navigation";
 
 interface PageProps {
@@ -8,22 +10,23 @@ interface PageProps {
   }>;
 }
 
-// Brand slug to actual brand name mapping
-const brandMapping: Record<string, string> = {
-  dewalt: "DeWalt",
-  stanley: "Stanley",
-  "black-decker": "Black&Decker",
-};
-
 export default async function Page({ params }: PageProps) {
-  const { brand } = await params;
+  const { brand, locale } = await params;
   const normalizedBrand = brand.toLowerCase();
 
-  // Check if brand exists in mapping
-  if (!brandMapping[normalizedBrand]) {
+  if (!BRAND_KEY_BY_SLUG[normalizedBrand]) {
     return notFound();
   }
 
-  const brandName = brandMapping[normalizedBrand];
-  return <BrandPage brandName={brandName} brandSlug={normalizedBrand} />;
+  const brandKey = BRAND_KEY_BY_SLUG[normalizedBrand];
+  const content = await getBrandContent();
+
+  return (
+    <BrandPage
+      brandKey={brandKey}
+      brandSlug={normalizedBrand}
+      lang={locale === "ka" ? "ka" : "en"}
+      content={content?.[brandKey]}
+    />
+  );
 }
