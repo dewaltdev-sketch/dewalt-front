@@ -20,6 +20,9 @@ export const API_ROUTES = {
   // Brand content
   BRAND_CONTENT: "/brand-content",
 
+  // Service center
+  SERVICE_CENTER: "/service-center",
+
   // Banner Slider
   BANNER_SLIDER: "/banner-slider",
 

@@ -1,193 +1,72 @@
 "use client";
 
-import LocationIcon from "@/components/icons/locationIcon";
-import PhoneIcon from "@/components/icons/phoneIcon";
 import Breadcrumb from "@/components/ui/breadcrumb";
 import Image from "next/image";
-import serviceCenterImg from "@/public/imgs/service.png";
 import { useTranslations } from "next-intl";
+import { normalizeRichTextHtml } from "@/lib/normalizeRichTextHtml";
+import ServiceCenterStaticFallback from "./serviceCenterStaticFallback";
 
-export default function ServiceCenterPage() {
+type Props = {
+  heroTitle?: string;
+  contentHtml?: string;
+  imageUrl?: string;
+};
+
+export default function ServiceCenterPage({
+  heroTitle,
+  contentHtml,
+  imageUrl,
+}: Props) {
   const t = useTranslations();
 
   const breadcrumbItems = [
     { label: t("breadcrumb.home"), href: "/" },
     { label: t("breadcrumb.serviceCenter") },
   ];
+
+  const hasCmsBody = Boolean(contentHtml?.trim());
+  const imgSrc = imageUrl?.trim() || "/imgs/service.png";
+  const isRemoteImg = imgSrc.startsWith("http");
+
+  if (!hasCmsBody) {
+    return (
+      <div>
+        <Breadcrumb items={breadcrumbItems} />
+        <ServiceCenterStaticFallback />
+      </div>
+    );
+  }
+
   return (
     <div>
       <Breadcrumb items={breadcrumbItems} />
 
-      <div className="bg-background mb-6 py-6 text-lg md:py-14 md:text-2xl">
-        <div className="text-dark-secondary-100 mx-auto max-w-[1080px] px-5">
-          Dewalt Service Center ტექნიკური სერვისი და სათადარიგო ნაწილები
+      {heroTitle?.trim() ? (
+        <div className="bg-background mb-6 py-6 text-lg md:py-14 md:text-2xl">
+          <div className="text-dark-secondary-100 mx-auto max-w-[1080px] px-5">
+            {heroTitle}
+          </div>
         </div>
+      ) : null}
+
+      <div className="mt-8 mb-5 flex justify-center md:mt-14 md:justify-center">
+        <Image
+          src={imgSrc}
+          alt=""
+          width={800}
+          height={480}
+          className="max-h-[480px] w-auto object-contain"
+          unoptimized={isRemoteImg}
+        />
       </div>
-      <div className="mx-auto max-w-[1080px] px-5">
-        <div className="mb-6 text-xs leading-relaxed sm:mb-8 sm:text-sm">
-          <p>dewalt service center ტექნიკური სერვისი და სათადარიგო ნაწილები.</p>
-          <p>
-            ➲ ავტორიზებული სერვის ცენტრი: ჩვენი მიზანია შევთავაზოთ მომხმარებელს
-            უფასო სერვისი საუკეთესო პირობებით საგარანტიო პერიოდში.
-          </p>
-          <p>
-            ➲ გარანტიის შემდგომი მომსახურება და ყოველთვის შეღავათიანი ფასები
-            ორიგინალ სათადარიგო ნაწილებზე.
-          </p>
-          <p>
-            ➲ ლაზერული ტექნიკის, ელექტრო და აკუმულატორული ხელსაწყოების, ჰაერის
-            კომპრესორების შეკეთება.
-          </p>
-        </div>
 
-        <div className="bg-background mb-8 flex flex-col items-start gap-3 p-3 text-sm sm:items-center sm:gap-4 sm:p-2.5 md:flex-row md:gap-10">
-          <div className="flex items-center gap-2">
-            <LocationIcon className="text-dark-secondary-100 shrink-0" />{" "}
-            <span>თბილისი, ქსნის ქუჩა 36. </span>
-          </div>
-          <div className="flex items-center gap-2">
-            <PhoneIcon className="text-dark-secondary-100 shrink-0" />{" "}
-            <span>555 52 54 67</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <PhoneIcon className="text-dark-secondary-100 shrink-0" />{" "}
-            <span>577 95 55 83</span>
-          </div>
-        </div>
-        <div className="mb-8 flex justify-center md:mb-14 md:justify-end">
-          <Image
-            src={serviceCenterImg}
-            alt="Service Center"
-            className="object-contain"
-          />
-        </div>
-        <div className="bg-background mb-6 block w-full p-3 text-xs sm:inline-block sm:w-auto sm:p-2.5 sm:text-sm">
-          <span>⇨ გთხოვთ ყურადღებით გაეცნოთ გარანტიის პირობებს ⇦</span>
-        </div>
-        <div className="text-dark-secondary-100 text-xs leading-relaxed sm:text-sm">
-          <p className="leading-relaxed">
-            1. გილოცავთ მაღალხარისხოვან DEWALT-ის პროდუქტის შეძენას, ჩვენ
-            ვაფასებთ თქვენს არჩევანს.
-          </p>
-          <p className="leading-relaxed">
-            2. პროდუქტის შეძენისას, მოითხოვეთ, შემოწმდეს მისი კომპლექტაციის
-            სისრულე და გამართული მუშაობა თქვენი თანდასწრებით. გარანტიის ბარათში
-            მითითებული უნდა იყოს: მოდელი, გაყიდვის თარიღი, სერიული ნომერი,
-            წარმოების თარიღი, სავაჭრო ორგანიზაციის სახელი, ბეჭედი და ხელმოწერა.
-            საგარანტიო ბარათის არ ქონის, ან მასში შევსებული შეუსაბამო
-            ინფორმაციის შემთხვევაში, ჩვენ იძულებულნი ვიქნებით უარყოთ თქვენი
-            პრეტენზიები ამ პროდუქტის ხარისხზე.
-          </p>
-          <p>
-            3. გაუგებრობების თავიდან აცილების მიზნით, სანამ დაიწყებთ სამუშაოს
-            შესრულებას, კატეგორიული მოთხოვნაა, გაეცნოთ მოხმარების ინსტრუქციას.
-            გარანტიის პირობების სამართლებრივი საფუძველია, საქართველოს მოქმედი
-            კანონი. პროდუქტის საგარანტიო პერიოდი 12 თვეა და ათვლა იწყება
-            გაყიდვის დღიდან. დეფექტების აღმოფხვრის შემთხვევაში პროდუქციის
-            გარანტიის პერიოდი, გაგრძელდება მისი სერვისში ყოფნის პერიოდით.
-            პროდუქტის სამუშაო ვადა 5 წელი.
-          </p>
-          <p>
-            4. პროდუქტის ექსპლუატაციის დროს, ნებისმიერი პრობლემის შემთხვევაში,
-            ჩვენ გირჩევთ დაუკავშირდეთ მხოლოდ DEWALT -ის ავტორიზებულ სერვის
-            ცენტრებს. მისამართები და ტელეფონის ნომერი, შეგიძლიათ იხილოთ
-            ვებ-გვერდზე www.2helpU.com ან იკითხოთ მაღაზიაში. (თბილისი - ქსნის
-            ქუჩა 36 TEL: 555 52 54 67)
-          </p>
-          <p>
-            5. მწარმოებელი რეკომენდაციას იძლევა პერიოდულად შეამოწმოთ პროდუქცია
-            ავტორიზირებულ სერვის ცენტრში.
-          </p>
-          <p>
-            6. ჩვენი საგარანტიო ვალდებულება ვრცელდება, მხოლოდ გარანტიის პერიოდში
-            აღმოჩენილ ხარვეზებზე, რომელიც გამოწვეულია წარმოებისას ან ქარხნული
-            ნაწილისგან.
-          </p>
-          <p>7. გარანტიის პირობები არ ვრცელდება, გაუმართაობაზე:</p>
-          <p>
-            7.1 როდესაც არ იქნა დაცული მომხმარებლის მიერ, პროდუქტის ინსტრუქციაში
-            მითითებული ექსპლუატაცია, პროდუქტის გამოყენება არა დანიშნულებისამებრ,
-            არასწორი შენახვის, აქსესუარებისა და სათადარიგო ნაწილების გამოყენება
-            თუ ეს არ არის მწარმოებლის მიერ გათვალისწინებული.
-          </p>
-          <p>
-            7.2 როდესაც პროდუქტის შიდა და გარე ნაწილების მექანიკური დაზიანება
-            (გატეხვა, ბზარები და დაშლა) დგინდება, ასევე, ძირითადი და დამხმარე
-            სახელურებზე, მაგისტრალურ ელექტრონულ კაბელზე, რომლის დაზიანებაც
-            გამოწვეულია გარე ზემოქმედებიდან ან სხვა ზემოქმედებიდან.
-          </p>
-          <p>
-            7.3 როდესაც ხვდება სავენტილაციო სისტემაში სამსშენებლო მასალები ან
-            სამშენებლო ნივთიერებები, ან პროდუქტში მოხდება ჩასხმა ან შეღწევა
-            სამშენებლო მასალების ან ნივთიერების, გარდა მასალებისა და
-            ნივთიერებისა, რომლებიც გამოიყენება პროდუქციის გამოყენებისას და
-            საჭიროა მუშაობისას.
-          </p>
-          <p>
-            7.4 უარყოფითი ატმოსფერული და სხვა გარე ფაქტორების დროს, როგორიცაა
-            წვიმა, თოვლი, მაღალი ტენიანობა, გადაცხელება, აგრესიული გარემო,
-            ინსტრუმენტზე მითითებულ ელექტროენერგიის ქსელის პარამეტრების
-            შეუსაბამობა.
-          </p>
-          <p>
-            7.5 როდესაც პროდუქტის დაზიანება ხდება გაუთვალისწინებელი
-            კატასტროფების გამო, ბუნებრივი კატასტროფები, მათ შორის ფორსმაჟორულიც
-            (ცეცხლი, მეხი, წყალდიდობა და სხვა ბუნებრივი მოვლენები), ასევე დენის
-            ცვალოდბადობის და სხვა მიზეზებით, რომლებიც მწარმოებლის კონტროლს არ
-            ექვემდებარება.
-          </p>
-          <p>8. გარანტიის პირობები არ ვრცელდება:</p>
-          <p>
-            8.1 ავტორიზირებული სერვისის გარეთ ინსტრუმენტის გახსნის, შეკეთების ან
-            მოდიფიცირების შემთხვევაში.
-          </p>
-          <p>
-            8.2 დეტალებზე და გადაბმებზე რომლებზეც აღენიშნება ბუნებრივი ცვეთის
-            ნიშნები მაგალითად: წამყვანი ქამრები და ბორბლები, ნახშირის ჯაგრისები
-            (მცოცავი კონტაქტები), საკისრები, რედუქტორების გადაადგილება, რეზინის
-            ბეჭდები, ზეთის ბეჭდები, მიმართულების გორგოლაჭები და ა.შ.
-          </p>
-          <p>
-            8.3 შესაცვლელ და ცვეთად ნაწილებზე: ცანგაზე, აბრაზიულ დისკებზე,
-            ფილტრებზე, გადაბმულ დანებზე (ჯაჭვზე), მტვრის დამცავზე და ა.შ.
-          </p>
-          <p>
-            8.4 ინსტრუმენტის გადატვირთვის შედეგად წარმოქმნილ გაუმართაობაზე
-            (მექანიკური და ელექტრო გაუმართაობა), რის შედეგადაც გამოვა მწყობრიდან
-            ორი ან მეტი ნაწილი ერთსა და იმავე დროს, მაგალითად: როტორი და
-            სტატორი, ორივე სტატორის ხვეულა, ან სხვა კომპონენტები და მათი
-            ნაწილები. პროდუქტის გადატვირთვის აშკარა ნიშნებისას, მაგ: პროდუქტის
-            ნაწილების და კომპონენტების გაუფერულება, დეფორმაცია ან შერწყმა,
-            ჩაბნელება ან კარბონიზაცია, ელექტროძრავის სადენების იზოლაცია მაღალი
-            ტემპერატურის გავლენის ქვეშ.
-          </p>
-        </div>
-        <div className="bg-background my-6 block w-full p-3 text-xs sm:inline-block sm:w-auto sm:p-2.5 sm:text-sm">
-          <span>
-            ⇨ დამატებითი პირობები ჩვენი სერვის ცენტრისგან ჩვენი
-            მომხმარებლებისთვის ⇦
-          </span>
-        </div>
-
-        <div className="mb-8 text-xs leading-relaxed sm:text-sm">
-          <p>
-            ➲ საგარანტიო პერიოდში (12 თვის განმავლობაში) ჩვენ მაღაზიაში შეძენილ
-            ინსტრუმენტებზე, ნებისმიერ დროს როცა საჭიროდ ჩათვლით, ინსტრუმენტის
-            დიაგნოსტიკა, გაწმენდვა, დაზეთვა, ( რაც ზოგადად გარანტიაში არ შედის)
-            უფასოდ გექნებათ.
-          </p>
-          <p>
-            ➲ რეკომენდაციას გიწევთ რომ აუცილებლად გამოიყენოთ ეს სერვისი, რათა
-            ხელი შეუწყოთ ინსტრუმენტის ხანგრძლივი დროით გამართულად მუშაობას.
-          </p>
-        </div>
-
-        <div className="bg-background my-6 mb-14 block w-full p-3 text-xs sm:inline-block sm:w-auto sm:p-2.5 sm:text-sm">
-          <span>
-            ⇨ DEWALT-ის სერვის ცენტრი თქვენ და თქვენს DEWALT-ის ინსტრუმენტს
-            ხანგრძლივ და უპრობლემო ერთობლივ მუშაობას გისურვებთ 🤗
-          </span>
-        </div>
+      <div className="mx-auto max-w-[1080px] px-5 pb-14">
+        <div
+          className="text-dark-secondary-100 prose prose-sm sm:prose-base max-w-none [&_ol]:ml-5 [&_ol]:list-outside [&_ol]:list-decimal [&_ul]:ml-5 [&_ul]:list-outside [&_ul]:list-disc"
+          dangerouslySetInnerHTML={{
+            __html: normalizeRichTextHtml(contentHtml),
+          }}
+        />
       </div>
     </div>
   );

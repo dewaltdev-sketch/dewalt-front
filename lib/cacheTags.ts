@@ -19,6 +19,9 @@ export const CACHE_TAGS = {
   brandContent: {
     all: ["brand-content"] as const,
   },
+  serviceCenter: {
+    all: ["service-center"] as const,
+  },
   bannerCarousel: {
     all: ["banner-carousel"] as const,
   },
