@@ -37,7 +37,7 @@ export default async function NewsDetail({ id }: { id: string }) {
             {/* Main Article */}
             <article className="border-line-color min-w-0 md:border-r md:pr-6">
               {/* Featured Image */}
-              <div className="relative mb-4 aspect-636/389 w-full overflow-hidden md:mb-6">
+              <div className="relative mb-4 aspect-496/379 w-full overflow-hidden md:mb-6">
                 <Image
                   src={news.image}
                   alt={news.name}
