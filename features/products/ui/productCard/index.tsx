@@ -53,6 +53,12 @@ export default function ProductCard({
           </div>
         ) : null}
 
+        {orderOnly ? (
+          <div className="bg-discount-BG text-discount-text absolute top-2 left-2 z-10 rounded px-1 py-2 text-xs font-normal">
+            {t("product.orderOnly")}
+          </div>
+        ) : null}
+
         {/* Compare Checkbox */}
         <div className="absolute top-[165px] right-4 z-10 md:top-[170px] md:right-5">
           <CompareButton productId={_id} />
