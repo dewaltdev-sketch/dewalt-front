@@ -257,7 +257,7 @@ export default function OrdersPage() {
                                     href={`/products/${generateSlug(item.productId.name, item.productId?._id)}`}
                                     className="line-clamp-2 text-sm font-semibold text-gray-900 hover:underline"
                                   >
-                                    {item.productId.name}
+                                    {item.productId.name} {item.finaCode}
                                   </Link>
 
                                   {item.productId.code && (

@@ -19,6 +19,9 @@ import { useFinaProductsRestArray } from "@/features/fina/hooks/useFinaProductsR
 import { toast } from "sonner";
 
 type DeliveryType = "tbilisi" | "region";
+type CheckoutStockItem = {
+  product: { finaId?: number; quantity?: number };
+};
 
 export type DeliveryInformation = {
   tbilisi: {
@@ -32,6 +35,23 @@ export type DeliveryInformation = {
     freeEnabled?: boolean;
   };
 };
+
+function getCheckoutAvailableQuantity(
+  item: CheckoutStockItem,
+  restMap?: Record<number, number> | null
+) {
+  const localAvailable = item.product.quantity ?? 0;
+  const finaId = item.product.finaId;
+
+  if (typeof finaId !== "number" || !restMap) {
+    return localAvailable;
+  }
+
+  const finaAvailable = restMap[finaId] ?? 0;
+
+  // Respect both FINA stock and locally reserved stock.
+  return Math.max(0, Math.min(localAvailable, finaAvailable));
+}
 
 export default function CheckoutPage({
   deliveryInformation,
@@ -67,11 +87,7 @@ export default function CheckoutPage({
   const insufficientItems = useMemo(() => {
     return selectedItems
       .map((item) => {
-        const finaId = item.product.finaId;
-        const available =
-          typeof finaId === "number" && finaRestMap
-            ? (finaRestMap[finaId] ?? 0)
-            : (item.product.quantity ?? 0);
+        const available = getCheckoutAvailableQuantity(item, finaRestMap);
 
         return {
           productId: item.product._id,
@@ -224,11 +240,10 @@ export default function CheckoutPage({
 
                 const latestInsufficient = selectedItems
                   .map((item) => {
-                    const finaId = item.product.finaId;
-                    const available =
-                      typeof finaId === "number" && restMapToUse
-                        ? (restMapToUse[finaId] ?? 0)
-                        : (item.product.quantity ?? 0);
+                    const available = getCheckoutAvailableQuantity(
+                      item,
+                      restMapToUse
+                    );
 
                     return {
                       name: item.product.name,

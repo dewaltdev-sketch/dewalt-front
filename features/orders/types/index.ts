@@ -52,7 +52,7 @@ export interface OrderDetailsWithItems extends OrderDetails {
   items: { productId: string; quantity: number }[];
 }
 export interface OrderStatusResponse {
-  status: "pending" | "failed" | "paid" | "shipped" | "delivered";
+  status: "pending" | "failed" | "paid" | "shipped" | "delivered" | "cancelled";
   order: OrderDetailsWithItems;
 }
 
@@ -81,6 +81,7 @@ export interface OrderItemDetails {
   personalId: string;
   phone: string;
   surname: string;
+  finaCode?: string;
 }
 
 export interface UserOrder extends OrderDetails {
