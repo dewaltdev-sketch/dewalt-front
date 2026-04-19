@@ -309,12 +309,20 @@ export default function RegisterPage() {
                   setTermsError(false);
                 }}
                 label={
-                  <Link
-                    href="/terms"
-                    className="text-text-secondary text-xs hover:underline"
-                  >
-                    {t("auth.register.agreeTerms")}
-                  </Link>
+                  <>
+                    <Link
+                      href="/terms"
+                      className="text-text-secondary text-xs hover:underline"
+                    >
+                      {t("auth.register.agreeTerms")}
+                    </Link>{" "}
+                    <Link
+                      href="/privacy"
+                      className="text-text-secondary text-xs hover:underline"
+                    >
+                      {t("auth.register.agreePrivacyPolicy")}
+                    </Link>
+                  </>
                 }
                 labelClassName="text-text-secondary text-xs pl-2"
                 className="gap-2"
