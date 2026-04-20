@@ -1,5 +1,5 @@
 "use client";
-import { startTransition, useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { CartContext } from ".";
 import type { CartContextType, StoredCartItem } from "../types";
 import type { Product } from "../../types";
@@ -15,6 +15,14 @@ export default function CartProvider({
     useState<boolean>(true);
   const isInitialized = useRef(false);
 
+  const finalizeLocalStorageInit = (nextItems: StoredCartItem[] = []) => {
+    queueMicrotask(() => {
+      setStoredItems(nextItems);
+      setIsLoadingLocalStorage(false);
+      isInitialized.current = true;
+    });
+  };
+
   // Load from localStorage on client side only
   useEffect(() => {
     if (typeof window !== "undefined" && !isInitialized.current) {
@@ -22,37 +30,34 @@ export default function CartProvider({
       if (cartItems) {
         try {
           const parsed = JSON.parse(cartItems);
-          startTransition(() => {
-            const normalized: StoredCartItem[] = Array.isArray(parsed)
-              ? parsed
-                  .map((item: unknown): StoredCartItem | null => {
-                    if (
-                      item &&
-                      typeof item === "object" &&
-                      "productId" in item
-                    ) {
-                      const storedItem = item as StoredCartItem;
-                      return {
-                        productId: String(storedItem.productId),
-                        quantity: Number(storedItem.quantity) || 1,
-                        selected: storedItem.selected ?? true,
-                      };
-                    }
+          const normalized: StoredCartItem[] = Array.isArray(parsed)
+            ? parsed
+                .map((item: unknown): StoredCartItem | null => {
+                  if (
+                    item &&
+                    typeof item === "object" &&
+                    "productId" in item
+                  ) {
+                    const storedItem = item as StoredCartItem;
+                    return {
+                      productId: String(storedItem.productId),
+                      quantity: Number(storedItem.quantity) || 1,
+                      selected: storedItem.selected ?? true,
+                    };
+                  }
 
-                    return null;
-                  })
-                  .filter((item): item is StoredCartItem => item !== null)
-              : [];
+                  return null;
+                })
+                .filter((item): item is StoredCartItem => item !== null)
+            : [];
 
-            setStoredItems(normalized);
-            setIsLoadingLocalStorage(false);
-          });
-          isInitialized.current = true;
+          finalizeLocalStorageInit(normalized);
         } catch (error) {
           console.error("Failed to parse cartItems from localStorage", error);
+          finalizeLocalStorageInit([]);
         }
       } else {
-        isInitialized.current = true;
+        finalizeLocalStorageInit([]);
       }
     }
   }, []);
