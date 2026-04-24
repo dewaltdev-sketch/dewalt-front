@@ -37,7 +37,9 @@ export default function OrderDeliveryOptions({
     const title =
       type === "tbilisi"
         ? t("checkout.deliveryTbilisi")
-        : t("checkout.deliveryRegion");
+        : type === "region"
+          ? t("checkout.deliveryRegion")
+          : t("checkout.deliveryOfficePickup");
 
     return (
       <label
@@ -72,9 +74,11 @@ export default function OrderDeliveryOptions({
           ) : (
             <>
               <span className="text-text-secondary block">
-                +{ui.basePrice} GEL
+                {type === "officePickup" ? "0 GEL" : `+${ui.basePrice} GEL`}
               </span>
-              {ui.freeEnabled && typeof ui.freeOver === "number" ? (
+              {type !== "officePickup" &&
+              ui.freeEnabled &&
+              typeof ui.freeOver === "number" ? (
                 <span className="text-text-secondary mt-1 block">
                   {t("checkout.freeOverDynamic", { amount: ui.freeOver })}
                 </span>

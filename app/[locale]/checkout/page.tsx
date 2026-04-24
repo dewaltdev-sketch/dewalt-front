@@ -15,6 +15,10 @@ export default async function Page() {
       freeOver: settings?.deliveryRegionFreeOver || 0,
       freeEnabled: settings?.freeDeliveryEnabled ?? true,
     },
+    officePickup: {
+      price: 0,
+      freeEnabled: false,
+    },
   };
   return <CheckoutPage deliveryInformation={deliveryInformation} />;
 }

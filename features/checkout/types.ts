@@ -4,7 +4,7 @@ export type DeliveryInformation = Record<
   DeliveryType,
   {
     price: number;
-    freeOver: number;
+    freeOver?: number;
     freeEnabled?: boolean;
   }
 >;

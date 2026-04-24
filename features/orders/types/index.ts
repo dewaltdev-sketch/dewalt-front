@@ -1,4 +1,4 @@
-export type DeliveryType = "tbilisi" | "region";
+export type DeliveryType = "tbilisi" | "region" | "officePickup";
 
 export interface CreateOrderItemPayload {
   productId: string;
@@ -76,7 +76,7 @@ export interface OrderItemDetails {
   unitPrice: number;
   lineTotal: number;
   address: string;
-  deliveryType: "region" | "tbilisi";
+  deliveryType: "region" | "tbilisi" | "officePickup";
   name: string;
   personalId: string;
   phone: string;

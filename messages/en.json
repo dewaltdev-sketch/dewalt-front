@@ -72,6 +72,7 @@
     "deliveryTitle": "Delivery",
     "deliveryTbilisi": "Delivery in Tbilisi",
     "deliveryRegion": "Delivery in Region",
+    "deliveryOfficePickup": "Office pickup",
     "summaryTitle": "Order summary",
     "itemsCount": "Items count",
     "subtotal": "Subtotal",
@@ -126,7 +127,8 @@
     "notAvailable": "N/A",
     "deliveryType": {
       "tbilisi": "Delivery in Tbilisi",
-      "region": "Delivery in Region"
+      "region": "Delivery in Region",
+      "officePickup": "Office pickup"
     },
     "error": "We couldn't find this order or the payment failed.",
     "goHome": "Go to home",
@@ -421,7 +423,8 @@
     "deliveryType": {
       "label": "Delivery",
       "tbilisi": "Delivery in Tbilisi",
-      "region": "Delivery in Region"
+      "region": "Delivery in Region",
+      "officePickup": "Office pickup"
     },
     "address": "Address",
     "pagination": {

@@ -32,7 +32,7 @@ export default function PaymentStatusPage() {
         removeItem(item.productId);
       });
     }
-  }, [order, data?.status]);
+  }, [order, data?.status, removeItem]);
 
   if (isLoading) {
     return (
@@ -84,7 +84,9 @@ export default function PaymentStatusPage() {
   const deliveryTypeLabel =
     order?.deliveryType === "tbilisi"
       ? t("paymentStatus.deliveryType.tbilisi")
-      : t("paymentStatus.deliveryType.region");
+      : order?.deliveryType === "region"
+        ? t("paymentStatus.deliveryType.region")
+        : t("paymentStatus.deliveryType.officePickup");
 
   return (
     <div>

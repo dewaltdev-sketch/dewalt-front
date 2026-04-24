@@ -13,8 +13,9 @@ export type DeliveryUi = {
 export function getAvailableDeliveryTypes(
   deliveryInformation?: DeliveryInformation | null
 ): DeliveryType[] {
-  const types: DeliveryType[] = ["tbilisi", "region"];
+  const types: DeliveryType[] = ["tbilisi", "region", "officePickup"];
   return types.filter((type) => {
+    if (type === "officePickup") return true;
     const price = deliveryInformation?.[type]?.price ?? 0;
     return typeof price === "number" && price > 0;
   });
@@ -45,9 +46,12 @@ export function getDeliveryUi({
   const basePrice = info?.price ?? 0;
   const freeOver = info?.freeOver;
   const freeEnabled = info?.freeEnabled ?? true;
+  const isOfficePickup = type === "officePickup";
 
-  const isAvailable = typeof basePrice === "number" && basePrice > 0;
+  const isAvailable =
+    isOfficePickup || (typeof basePrice === "number" && basePrice > 0);
   const isFreeEligible =
+    !isOfficePickup &&
     isAvailable &&
     freeEnabled &&
     typeof freeOver === "number" &&

@@ -73,6 +73,7 @@
     "deliveryTitle": "მიწოდება",
     "deliveryTbilisi": "მიწოდება თბილისში",
     "deliveryRegion": "მიწოდება რეგიონში",
+    "deliveryOfficePickup": "გატანა ოფისიდან",
     "summaryTitle": "შეკვეთის შეჯამება",
     "itemsCount": "პროდუქტების რაოდენობა",
     "subtotal": "ღირებულება",
@@ -128,7 +129,8 @@
     "notAvailable": "არ არის",
     "deliveryType": {
       "tbilisi": "მიწოდება თბილისში",
-      "region": "მიწოდება რეგიონში"
+      "region": "მიწოდება რეგიონში",
+      "officePickup": "გატანა ოფისიდან"
     },
     "error": "შეკვეთა ვერ მოიძებნა ან გადახდა ვერ შესრულდა.",
     "goHome": "მთავარ გვერდზე",
@@ -423,7 +425,8 @@
     "deliveryType": {
       "label": "მიწოდება",
       "tbilisi": "მიწოდება თბილისში",
-      "region": "მიწოდება რეგიონში"
+      "region": "მიწოდება რეგიონში",
+      "officePickup": "გატანა ოფისიდან"
     },
     "address": "მისამართი",
     "pagination": {

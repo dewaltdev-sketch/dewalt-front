@@ -20,6 +20,8 @@ type FormFieldProps = {
   transform?: (value: string) => string;
   className?: string;
   inputClassName?: string;
+  disabled?: boolean;
+  readOnly?: boolean;
 };
 
 export default function FormField({
@@ -37,6 +39,8 @@ export default function FormField({
   transform,
   className,
   inputClassName,
+  disabled,
+  readOnly,
 }: FormFieldProps) {
   return (
     <div className={className}>
@@ -65,8 +69,11 @@ export default function FormField({
                 onBlur={field.onBlur}
                 placeholder={placeholder}
                 required={required}
+                disabled={disabled}
+                readOnly={readOnly}
                 className={cn(
                   "bg-background border-line-color focus-visible:ring-primary/50 w-full rounded-lg border px-3 py-2 text-sm focus-visible:ring-2 focus-visible:outline-none",
+                  disabled && "cursor-not-allowed opacity-50",
                   showError && "border-red-500 focus-visible:ring-red-500/50",
                   inputClassName
                 )}
@@ -83,6 +90,8 @@ export default function FormField({
               maxLength={maxLength}
               placeholder={placeholder}
               required={required}
+              disabled={disabled}
+              readOnly={readOnly}
               icon={icon}
               rightIcon={rightIcon}
               error={showError}

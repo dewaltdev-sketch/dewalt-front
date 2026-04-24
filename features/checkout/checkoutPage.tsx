@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo } from "react";
+import { useMemo, useRef } from "react";
 import Breadcrumb from "@/components/ui/breadcrumb";
 import { Button } from "@/components/ui/button";
 import FormField from "@/components/formField";
@@ -17,24 +17,14 @@ import { getAvailableDeliveryTypes } from "./utils/delivery";
 import { useCreateOrderPayment } from "@/features/orders/hooks/useCreateOrderPayment";
 import { useFinaProductsRestArray } from "@/features/fina/hooks/useFinaProductsRestArray";
 import { toast } from "sonner";
+import type { DeliveryInformation } from "./types";
+import type { DeliveryType } from "@/features/orders/types";
 
-type DeliveryType = "tbilisi" | "region";
 type CheckoutStockItem = {
   product: { finaId?: number; quantity?: number };
 };
 
-export type DeliveryInformation = {
-  tbilisi: {
-    price: number;
-    freeOver: number;
-    freeEnabled?: boolean;
-  };
-  region: {
-    price: number;
-    freeOver: number;
-    freeEnabled?: boolean;
-  };
-};
+const OFFICE_PICKUP_ADDRESS = "ოფისიდან გატანა";
 
 function getCheckoutAvailableQuantity(
   item: CheckoutStockItem,
@@ -109,6 +99,7 @@ export default function CheckoutPage({
     () => getAvailableDeliveryTypes(deliveryInformation),
     [deliveryInformation]
   );
+  const lastManualAddressRef = useRef("");
 
   const hasDeliveryOptions = availableDeliveryTypes.length > 0;
   const defaultDeliveryType: DeliveryType =
@@ -132,6 +123,7 @@ export default function CheckoutPage({
     if (!selectedItems.length) return 0;
     const info = deliveryInformation?.[type];
     const price = info?.price ?? 0;
+    if (type === "officePickup") return 0;
     if (typeof price !== "number" || price <= 0) return 0;
 
     const freeOver = info?.freeOver;
@@ -211,7 +203,8 @@ export default function CheckoutPage({
               email: session?.user?.email ?? "",
               personalId: "",
               phone: "",
-              address: "",
+              address:
+                defaultDeliveryType === "officePickup" ? OFFICE_PICKUP_ADDRESS : "",
               deliveryType: defaultDeliveryType as DeliveryType,
             }}
             validationSchema={validationSchema}
@@ -274,7 +267,10 @@ export default function CheckoutPage({
                     email: values.email.trim(),
                     personalId: values.personalId.trim(),
                     phone: values.phone.trim(),
-                    address: values.address.trim(),
+                    address:
+                      effectiveDeliveryType === "officePickup"
+                        ? OFFICE_PICKUP_ADDRESS
+                        : values.address.trim(),
                     deliveryType: effectiveDeliveryType,
                     items: selectedItems.map((item) => ({
                       productId: item.product._id,
@@ -291,14 +287,47 @@ export default function CheckoutPage({
               }
             }}
           >
-            {({ values, handleChange, isValid, isSubmitting, setTouched }) => {
+            {({
+              values,
+              isValid,
+              isSubmitting,
+              setFieldValue,
+              setTouched,
+            }) => {
               const effectiveDeliveryType =
                 hasDeliveryOptions &&
                 availableDeliveryTypes.includes(values.deliveryType)
                   ? values.deliveryType
                   : defaultDeliveryType;
+              const isOfficePickupSelected =
+                effectiveDeliveryType === "officePickup";
               const deliveryPrice = getDeliveryPrice(effectiveDeliveryType);
               const totalPrice = subtotal + deliveryPrice;
+
+              const handleDeliveryTypeChange = (
+                event: React.ChangeEvent<HTMLInputElement>
+              ) => {
+                const nextDeliveryType = event.target.value as DeliveryType;
+                const currentDeliveryType = effectiveDeliveryType;
+
+                void setFieldValue("deliveryType", nextDeliveryType);
+
+                if (
+                  nextDeliveryType === "officePickup" &&
+                  currentDeliveryType !== "officePickup"
+                ) {
+                  lastManualAddressRef.current = values.address;
+                  void setFieldValue("address", OFFICE_PICKUP_ADDRESS);
+                  return;
+                }
+
+                if (
+                  nextDeliveryType !== "officePickup" &&
+                  currentDeliveryType === "officePickup"
+                ) {
+                  void setFieldValue("address", lastManualAddressRef.current);
+                }
+              };
 
               return (
                 <Form className="grid grid-cols-1 gap-6 lg:grid-cols-[1fr_320px]">
@@ -351,6 +380,8 @@ export default function CheckoutPage({
                         placeholder={t("checkout.addressPlaceholder")}
                         as="textarea"
                         rows={4}
+                        readOnly={isOfficePickupSelected}
+                        disabled={isOfficePickupSelected}
                       />
                     </div>
 
@@ -358,7 +389,7 @@ export default function CheckoutPage({
                       deliveryInformation={deliveryInformation}
                       subtotal={subtotal}
                       value={effectiveDeliveryType}
-                      onChange={handleChange}
+                      onChange={handleDeliveryTypeChange}
                       availableDeliveryTypes={availableDeliveryTypes}
                     />
 
