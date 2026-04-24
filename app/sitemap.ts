@@ -4,7 +4,7 @@ import { fetchApi } from "@/lib/apiClient.server";
 import { API_ROUTES } from "@/lib/apiRoutes";
 import { routing } from "@/i18n/routing";
 import { BRAND_STATIC_INFO } from "@/features/brands/brandInfo";
-import { generateSlug } from "@/lib/utils/slugify";
+import slugify from "slugify";
 
 type Locale = (typeof routing.locales)[number];
 
@@ -40,6 +40,12 @@ const STATIC_PATHS = [
   "/service-center",
 ] as const;
 
+const SLUGIFY_OPTIONS: Parameters<typeof slugify>[1] = {
+  lower: true,
+  strict: true,
+  remove: /[*+~.()'"!:@]/g,
+};
+
 function getBaseUrl() {
   return SITE_URL.endsWith("/") ? SITE_URL.slice(0, -1) : SITE_URL;
 }
@@ -50,6 +56,15 @@ function localizePath(locale: Locale, path: string) {
 
 function buildUrl(path: string) {
   return `${getBaseUrl()}${path}`;
+}
+
+function generateSitemapSlug(title: string, id?: string) {
+  const normalizedTitle =
+    typeof title === "string" && title.trim().length > 0 ? title : "product";
+
+  return id
+    ? `${slugify(normalizedTitle, SLUGIFY_OPTIONS)}-${id}`
+    : slugify(normalizedTitle, SLUGIFY_OPTIONS);
 }
 
 function buildAlternates(path: string) {
@@ -141,17 +156,18 @@ async function buildProductEntries(): Promise<SitemapEntry[]> {
   localizedProducts.forEach(({ locale, products }) => {
     products.forEach((product) => {
       const slugByLocale = localizedSlugMap.get(product._id) ?? {};
-      slugByLocale[locale] = product.slug;
+      slugByLocale[locale] = generateSitemapSlug(product.name, product._id);
       localizedSlugMap.set(product._id, slugByLocale);
     });
   });
 
   return localizedProducts.flatMap(({ locale, products }) =>
     products.map((product) => {
+      const slug = generateSitemapSlug(product.name, product._id);
       const slugByLocale = localizedSlugMap.get(product._id) ?? {};
 
       return {
-        url: buildUrl(localizePath(locale, `/products/${product.slug}`)),
+        url: buildUrl(localizePath(locale, `/products/${slug}`)),
         lastModified: product.updatedAt ? new Date(product.updatedAt) : new Date(),
         changeFrequency: "daily" as const,
         priority: 0.8,
@@ -190,14 +206,14 @@ async function buildNewsEntries(): Promise<SitemapEntry[]> {
   localizedNews.forEach(({ locale, articles }) => {
     articles.forEach((article) => {
       const slugByLocale = localizedSlugMap.get(article._id) ?? {};
-      slugByLocale[locale] = generateSlug(article.title, article._id);
+      slugByLocale[locale] = generateSitemapSlug(article.title, article._id);
       localizedSlugMap.set(article._id, slugByLocale);
     });
   });
 
   return localizedNews.flatMap(({ locale, articles }) =>
     articles.map((article) => {
-      const slug = generateSlug(article.title, article._id);
+      const slug = generateSitemapSlug(article.title, article._id);
       const slugByLocale = localizedSlugMap.get(article._id) ?? {};
 
       return {
