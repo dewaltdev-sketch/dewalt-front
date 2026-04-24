@@ -40,8 +40,6 @@ const STATIC_PATHS = [
   "/service-center",
 ] as const;
 
-export const revalidate = DAY_IN_SECONDS;
-
 function getBaseUrl() {
   return SITE_URL.endsWith("/") ? SITE_URL.slice(0, -1) : SITE_URL;
 }

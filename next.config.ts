@@ -3,16 +3,15 @@ import createNextIntlPlugin from "next-intl/plugin";
 
 const nextConfig: NextConfig = {
   images: {
-    domains: [
-      "www.dewaltgeorgia.com",
-      "mgxuc2sd6bc4ygmd.public.blob.vercel-storage.com",
-    ],
     remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "www.dewaltgeorgia.com",
+      },
       {
         protocol: "https",
         hostname: "*.public.blob.vercel-storage.com",
       },
-
       {
         protocol: "https",
         hostname: "images.unsplash.com",
