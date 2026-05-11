@@ -79,6 +79,7 @@
     "deliveryPrice": "Delivery price",
     "total": "Total",
     "placeOrder": "Place order",
+    "payWithInstalment": "Pay with instalment",
     "submitting": "Submitting order...",
     "emptySelection": "No selected items to checkout.",
     "backToCart": "Back to cart",

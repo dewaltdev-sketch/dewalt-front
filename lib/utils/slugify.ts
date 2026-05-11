@@ -7,11 +7,9 @@ const options: Parameters<typeof slugify>[1] = {
 };
 
 export function generateSlug(title: string, id?: string): string {
-  if (typeof title !== "string") {
-    return id ? `${slugify(title, options)}-${id}` : slugify(title, options);
-  } else {
-    return id
-      ? `${slugify("product", options)}-${id}`
-      : slugify("product", options);
-  }
+  const normalizedTitle =
+    typeof title === "string" && title.trim().length > 0 ? title : "product";
+  const slug = slugify(normalizedTitle, options) || "product";
+
+  return id ? `${slug}-${id}` : slug;
 }

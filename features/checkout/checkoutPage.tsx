@@ -24,6 +24,8 @@ type CheckoutStockItem = {
   product: { finaId?: number; quantity?: number };
 };
 
+type CheckoutPaymentMethod = "card" | "tbcInstalment";
+
 const OFFICE_PICKUP_ADDRESS = "ოფისიდან გატანა";
 
 function getCheckoutAvailableQuantity(
@@ -52,7 +54,11 @@ export default function CheckoutPage({
   const { getSelectedItems, isLoading } = useCartContext();
   const selectedItems = getSelectedItems();
   const { data: session } = useSession();
-  const { startPayment, error: paymentError } = useCreateOrderPayment({
+  const {
+    startPayment,
+    startTbcInstalment,
+    error: paymentError,
+  } = useCreateOrderPayment({
     fallbackErrorMessage: t("checkout.paymentError"),
   });
 
@@ -100,6 +106,7 @@ export default function CheckoutPage({
     [deliveryInformation]
   );
   const lastManualAddressRef = useRef("");
+  const paymentMethodRef = useRef<CheckoutPaymentMethod>("card");
 
   const hasDeliveryOptions = availableDeliveryTypes.length > 0;
   const defaultDeliveryType: DeliveryType =
@@ -204,7 +211,9 @@ export default function CheckoutPage({
               personalId: "",
               phone: "",
               address:
-                defaultDeliveryType === "officePickup" ? OFFICE_PICKUP_ADDRESS : "",
+                defaultDeliveryType === "officePickup"
+                  ? OFFICE_PICKUP_ADDRESS
+                  : "",
               deliveryType: defaultDeliveryType as DeliveryType,
             }}
             validationSchema={validationSchema}
@@ -260,26 +269,30 @@ export default function CheckoutPage({
                   return;
                 }
 
-                await startPayment(
-                  {
-                    name: values.name.trim(),
-                    surname: values.surname.trim(),
-                    email: values.email.trim(),
-                    personalId: values.personalId.trim(),
-                    phone: values.phone.trim(),
-                    address:
-                      effectiveDeliveryType === "officePickup"
-                        ? OFFICE_PICKUP_ADDRESS
-                        : values.address.trim(),
-                    deliveryType: effectiveDeliveryType,
-                    items: selectedItems.map((item) => ({
-                      productId: item.product._id,
-                      quantity: item.quantity,
-                    })),
-                    userId: session?.user?._id,
-                  },
-                  { redirect: true }
-                );
+                const orderPayload = {
+                  name: values.name.trim(),
+                  surname: values.surname.trim(),
+                  email: values.email.trim(),
+                  personalId: values.personalId.trim(),
+                  phone: values.phone.trim(),
+                  address:
+                    effectiveDeliveryType === "officePickup"
+                      ? OFFICE_PICKUP_ADDRESS
+                      : values.address.trim(),
+                  deliveryType: effectiveDeliveryType,
+                  items: selectedItems.map((item) => ({
+                    productId: item.product._id,
+                    quantity: item.quantity,
+                  })),
+                  userId: session?.user?._id,
+                };
+
+                if (paymentMethodRef.current === "tbcInstalment") {
+                  await startTbcInstalment(orderPayload, { redirect: true });
+                  return;
+                }
+
+                await startPayment(orderPayload, { redirect: true });
               } catch {
                 // Error message is handled by the mutation hook
               } finally {
@@ -287,13 +300,7 @@ export default function CheckoutPage({
               }
             }}
           >
-            {({
-              values,
-              isValid,
-              isSubmitting,
-              setFieldValue,
-              setTouched,
-            }) => {
+            {({ values, isValid, isSubmitting, setFieldValue, setTouched }) => {
               const effectiveDeliveryType =
                 hasDeliveryOptions &&
                 availableDeliveryTypes.includes(values.deliveryType)
@@ -406,6 +413,35 @@ export default function CheckoutPage({
                       className="bg-primary hover:bg-primary/90 text-dark-secondary-100 mt-6 w-full"
                       disabled={isSubmitting}
                       onClick={() => {
+                        paymentMethodRef.current = "card";
+                        if (isValid) return;
+
+                        setTouched({
+                          name: true,
+                          surname: true,
+                          email: true,
+                          personalId: true,
+                          phone: true,
+                          address: true,
+                          deliveryType: true,
+                        });
+                        toast.error(
+                          t("checkout.validation.requiredFieldsToast")
+                        );
+                      }}
+                    >
+                      {isSubmitting
+                        ? t("checkout.submitting")
+                        : t("checkout.placeOrder")}
+                    </Button>
+                    {/* <Button
+                      type="submit"
+                      variant="outline"
+                      size="md"
+                      className="mt-3 w-full"
+                      disabled={isSubmitting}
+                      onClick={() => {
+                        paymentMethodRef.current = "tbcInstalment";
                         if (isValid) return;
 
                         setTouched({
@@ -422,8 +458,8 @@ export default function CheckoutPage({
                     >
                       {isSubmitting
                         ? t("checkout.submitting")
-                        : t("checkout.placeOrder")}
-                    </Button>
+                        : t("checkout.payWithInstalment")}
+                    </Button> */}
                     {!canPlaceOrder && (
                       <div className="mt-3 rounded-md border border-red-200 bg-red-50 p-3 text-sm text-red-600">
                         {finaIdsToCheck.length > 0 &&

@@ -36,6 +36,29 @@ export function useCreateOrderPayment({
     },
   });
 
+  const tbcInstalmentMutation = useMutation({
+    mutationFn: async (payload: CreateOrderPayload) => {
+      const createdOrder = await ordersService.create(payload);
+      const instalment = await ordersService.createTbcInstalment(
+        createdOrder._id
+      );
+      const redirectUrl = instalment.redirectUrl;
+
+      if (!redirectUrl) {
+        throw new Error("Missing TBC instalment redirect URL");
+      }
+
+      return { redirectUrl, orderId: createdOrder._id };
+    },
+    onSuccess: () => {
+      setError(null);
+      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.ORDERS.MY(1, 10) });
+    },
+    onError: (err: unknown) => {
+      setError(getErrorMessage(err, fallbackErrorMessage));
+    },
+  });
+
   return {
     startPayment: async (
       payload: CreateOrderPayload,
@@ -51,8 +74,22 @@ export function useCreateOrderPayment({
 
       return paymentUrl;
     },
+    startTbcInstalment: async (
+      payload: CreateOrderPayload,
+      opts: { redirect?: boolean } = {}
+    ) => {
+      setError(null);
+      const { redirectUrl } = await tbcInstalmentMutation.mutateAsync(payload);
+
+      const redirect = opts.redirect ?? true;
+      if (redirect && typeof window !== "undefined") {
+        window.location.assign(redirectUrl);
+      }
+
+      return redirectUrl;
+    },
     error,
-    isLoading: mutation.isPending,
+    isLoading: mutation.isPending || tbcInstalmentMutation.isPending,
     clearError: () => setError(null),
   };
 }

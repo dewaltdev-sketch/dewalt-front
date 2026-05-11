@@ -9,6 +9,33 @@ import BenefitsList from "@/components/benefitsList";
 import SecundAd from "@/features/ads/components/secundAd";
 import { Suspense } from "react";
 import ProductSliderLoader from "@/features/products/components/productSlider/productSliderLoader";
+import {
+  buildCanonicalUrl,
+  buildLanguageAlternates,
+  getSafeLocale,
+} from "@/lib/seo";
+import type { Metadata } from "next";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale: routeLocale } = await params;
+  const locale = getSafeLocale(routeLocale);
+  const canonicalUrl = buildCanonicalUrl(locale);
+
+  return {
+    alternates: {
+      canonical: canonicalUrl,
+      languages: buildLanguageAlternates(),
+    },
+    openGraph: {
+      url: canonicalUrl,
+      type: "website",
+    },
+  };
+}
 
 export default async function Home({
   params,

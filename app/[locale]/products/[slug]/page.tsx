@@ -1,6 +1,13 @@
 import ProductDetailsPage from "@/features/products/productDetailsPage";
 import { getProductById } from "@/features/products/server";
 import { extractIdFromSlug } from "@/lib/utils/extractIdFromSlug";
+import { generateSlug } from "@/lib/utils/slugify";
+import {
+  buildCanonicalUrl,
+  buildLanguageAlternatesByLocale,
+  Locale,
+} from "@/lib/seo";
+import { routing } from "@/i18n/routing";
 import { Metadata } from "next";
 import { getLocale } from "next-intl/server";
 
@@ -22,8 +29,10 @@ export async function generateMetadata({
 }: {
   params: Promise<{ slug: string; locale: string }>;
 }): Promise<Metadata> {
-  const { slug } = await params;
-  const locale = (await getLocale()) as "ka" | "en";
+  const { slug, locale: routeLocale } = await params;
+  const locale = routing.locales.includes(routeLocale as Locale)
+    ? (routeLocale as Locale)
+    : routing.defaultLocale;
 
   const id = await extractIdFromSlug(slug);
   if (!id) {
@@ -36,13 +45,38 @@ export async function generateMetadata({
   }
 
   const description = product.description.substring(0, 160);
+  const canonicalPath = `/products/${generateSlug(product.name, product._id)}`;
+  const localizedProducts = await Promise.all(
+    routing.locales.map(async (alternateLocale) => {
+      const localizedProduct =
+        alternateLocale === locale
+          ? product
+          : await getProductById(id, alternateLocale);
+
+      return [
+        alternateLocale,
+        localizedProduct
+          ? `/products/${generateSlug(localizedProduct.name, localizedProduct._id)}`
+          : undefined,
+      ] as const;
+    })
+  );
+  const pathsByLocale = Object.fromEntries(
+    localizedProducts.filter((entry) => entry[1])
+  ) as Partial<Record<Locale, string>>;
+  const canonicalUrl = buildCanonicalUrl(locale, canonicalPath);
 
   return {
     title: product.name,
     description,
+    alternates: {
+      canonical: canonicalUrl,
+      languages: buildLanguageAlternatesByLocale(pathsByLocale),
+    },
     openGraph: {
       title: product.name,
       description,
+      url: canonicalUrl,
       images: [
         {
           url: product.image,

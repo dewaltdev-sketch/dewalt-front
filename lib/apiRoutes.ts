@@ -45,6 +45,7 @@ export const API_ROUTES = {
 
   // Orders
   ORDERS: "/orders",
+  TBC_INSTALMENT: "/tbc-instalment",
 
   // Fina (FINA proxy endpoints)
   FINA: "/fina",

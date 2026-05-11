@@ -22,6 +22,7 @@ import LanguageInterceptor from "@/components/providers/LanguageInterceptor";
 import { getMenuBrands } from "@/features/categories/server/getMenuBrands";
 import { getBrands } from "@/features/categories/server/getBrands";
 import { AppIntlProvider } from "./providers";
+import { getMetadataBase } from "@/lib/seo";
 
 type Props = {
   children: React.ReactNode;
@@ -83,6 +84,7 @@ export async function generateMetadata({
     "Official DEWALT products in Georgia — tools, accessories, news, and service support.";
 
   return {
+    metadataBase: getMetadataBase(),
     title: {
       default: siteTitle,
       template: `%s | ${siteTitle}`,

@@ -48,6 +48,16 @@ export interface CreatePaymentResponse {
   };
 }
 
+export interface CreateTbcInstalmentResponse {
+  orderId: string;
+  orderUuid: string;
+  amount: number;
+  currency: "GEL";
+  sessionId: string;
+  redirectUrl: string;
+  status: string;
+}
+
 export interface OrderDetailsWithItems extends OrderDetails {
   items: { productId: string; quantity: number }[];
 }

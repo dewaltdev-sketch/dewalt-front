@@ -80,6 +80,7 @@
     "deliveryPrice": "მიწოდების ფასი",
     "total": "ჯამი",
     "placeOrder": "შეკვეთის გაფორმება",
+    "payWithInstalment": "განვადებით გადახდა",
     "submitting": "შეკვეთის გაგზავნა...",
     "emptySelection": "შერჩეული პროდუქტი არ არის.",
     "backToCart": "კალათაში დაბრუნება",
