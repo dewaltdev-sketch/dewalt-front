@@ -37,13 +37,9 @@ export default async function Page({
 export async function generateMetadata({
   params,
 }: {
-  params: Promise<{ slug: string; locale: string }>;
+  params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const activeLocale = (await getLocale()) as Locale;
-  const locale = routing.locales.includes(activeLocale)
-    ? activeLocale
-    : routing.defaultLocale;
 
   const id = await extractIdFromSlug(slug);
   if (!id) {
@@ -54,39 +50,27 @@ export async function generateMetadata({
   if (!newsApi) {
     return { title: "News not found" };
   }
-  const news = transformNewsApiToNews(newsApi, locale);
-  const canonicalPath = `/news/${news.slug}`;
-  const pathsByLocale = Object.fromEntries(
-    routing.locales.map((alternateLocale) => [alternateLocale, canonicalPath])
-  ) as Partial<Record<Locale, string>>;
-  const canonicalUrl = buildCanonicalUrl(locale, canonicalPath);
-
   return {
-    title: news.name,
-    description: news.description,
-    alternates: {
-      canonical: canonicalUrl,
-      languages: buildLanguageAlternatesByLocale(pathsByLocale),
-    },
+    title: newsApi.title,
+    description: newsApi.summary,
     openGraph: {
-      title: news.name,
+      title: newsApi.title,
       type: "article",
-      description: news.description.substring(0, 160),
-      url: canonicalUrl,
+      description: newsApi.summary.substring(0, 160),
       images: [
         {
-          url: news.image,
+          url: newsApi.imageUrl,
           width: 1200,
           height: 630,
-          alt: news.name,
+          alt: newsApi.title,
         },
       ],
     },
     twitter: {
       card: "summary_large_image",
-      title: news.name,
-      description: news.description.substring(0, 160),
-      images: [news.image],
+      title: newsApi.title,
+      description: newsApi.summary.substring(0, 160),
+      images: [newsApi.imageUrl],
     },
   };
 }
