@@ -15,6 +15,7 @@ export default function OrderSummary() {
     (total, item) => total + item.quantity,
     0
   );
+
   const totalPrice = selectedItems.reduce(
     (total, item) => total + item.product.price * item.quantity,
     0

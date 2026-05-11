@@ -26,4 +26,3 @@ export interface CartContextType {
   getTotalPrice: () => number;
   getSelectedItems: () => CartItem[];
 }
-

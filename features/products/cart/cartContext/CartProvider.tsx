@@ -33,11 +33,7 @@ export default function CartProvider({
           const normalized: StoredCartItem[] = Array.isArray(parsed)
             ? parsed
                 .map((item: unknown): StoredCartItem | null => {
-                  if (
-                    item &&
-                    typeof item === "object" &&
-                    "productId" in item
-                  ) {
+                  if (item && typeof item === "object" && "productId" in item) {
                     const storedItem = item as StoredCartItem;
                     return {
                       productId: String(storedItem.productId),
@@ -79,6 +75,24 @@ export default function CartProvider({
   const productsById = useMemo(() => {
     return new Map(products.map((product) => [product._id, product]));
   }, [products]);
+
+  useEffect(() => {
+    if (isLoadingLocalStorage || isLoading || storedItems.length === 0) return;
+
+    const zeroPriceProductIds = new Set(
+      products
+        .filter((product) => product.price === 0)
+        .map((product) => product._id)
+    );
+
+    if (zeroPriceProductIds.size === 0) return;
+
+    queueMicrotask(() => {
+      setStoredItems((prev) =>
+        prev.filter((item) => !zeroPriceProductIds.has(item.productId))
+      );
+    });
+  }, [isLoading, isLoadingLocalStorage, products, storedItems.length]);
 
   const items = useMemo(() => {
     return storedItems

@@ -29,7 +29,7 @@ export default function AddToCart({ product }: { product: Product }) {
     <Button
       size="md"
       className="w-full flex-1 sm:flex-initial md:w-auto"
-      disabled={maxQuantity === 0}
+      disabled={maxQuantity === 0 || !product.price}
       onClick={handleAddToCart}
     >
       <BucketIcon className="h-6 w-6" />
@@ -50,7 +50,11 @@ export const AddSingleItemToCart = ({
   const productInCart = items.find((item) => item.product._id === product._id);
   const productInCartQuantity = productInCart?.quantity || 0;
   const handleClick = () => {
-    if (!product.quantity || productInCartQuantity >= product.quantity) {
+    if (
+      !product.quantity ||
+      productInCartQuantity >= product.quantity ||
+      !product.price
+    ) {
       toast.warning(t("cart.outOfStock"), {
         duration: 3000,
       });
