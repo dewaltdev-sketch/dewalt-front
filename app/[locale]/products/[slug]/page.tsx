@@ -80,6 +80,7 @@ export async function generateMetadata({
     openGraph: {
       title: product.name,
       description,
+      type: "website",
       url: canonicalUrl,
       images: imageUrl
         ? [
