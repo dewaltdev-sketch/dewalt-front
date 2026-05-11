@@ -5,6 +5,8 @@ import { generateSlug } from "@/lib/utils/slugify";
 import {
   buildCanonicalUrl,
   buildLanguageAlternatesByLocale,
+  buildSocialImageUrl,
+  getImageMimeType,
   Locale,
 } from "@/lib/seo";
 import { routing } from "@/i18n/routing";
@@ -65,6 +67,8 @@ export async function generateMetadata({
     localizedProducts.filter((entry) => entry[1])
   ) as Partial<Record<Locale, string>>;
   const canonicalUrl = buildCanonicalUrl(locale, canonicalPath);
+  const imageUrl = buildSocialImageUrl(product.image);
+  const imageType = imageUrl ? getImageMimeType(product.image) : undefined;
 
   return {
     title: product.name,
@@ -77,27 +81,33 @@ export async function generateMetadata({
       title: product.name,
       description,
       url: canonicalUrl,
-      images: [
-        {
-          url: product.image,
-          width: 1200,
-          height: 630,
-          alt: product.name,
-        },
-      ],
+      images: imageUrl
+        ? [
+            {
+              url: imageUrl,
+              secureUrl: imageUrl,
+              width: 1200,
+              height: 630,
+              alt: product.name,
+              type: imageType,
+            },
+          ]
+        : undefined,
     },
     twitter: {
       card: "summary_large_image",
       title: product.name,
       description,
-      images: [
-        {
-          url: product.image,
-          width: 1200,
-          height: 630,
-          alt: product.name,
-        },
-      ],
+      images: imageUrl
+        ? [
+            {
+              url: imageUrl,
+              width: 1200,
+              height: 630,
+              alt: product.name,
+            },
+          ]
+        : undefined,
     },
   };
 }
