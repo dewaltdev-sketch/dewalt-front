@@ -149,7 +149,7 @@ export default function ContactPage({ contact }: { contact: ContactInfo }) {
           </h2>
           <div className="overflow-hidden rounded-lg border border-gray-200">
             <iframe
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2978.5!2d44.8271!3d41.7151!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zNDHCsDQyJzU0LjQiTiA0NMKwNDknMzcuNiJF!5e0!3m2!1ska!2sge!4v1234567890123!5m2!1ska!2sge"
+              src="https://www.google.com/maps?q=41.76816341342369%2C44.78538133558222&hl=ka&z=17&output=embed"
               width="100%"
               height="450"
               style={{ border: 0 }}
