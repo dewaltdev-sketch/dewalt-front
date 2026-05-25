@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useRef } from "react";
+import Image from "next/image";
 import Breadcrumb from "@/components/ui/breadcrumb";
 import { Button } from "@/components/ui/button";
 import FormField from "@/components/formField";
@@ -434,32 +435,7 @@ export default function CheckoutPage({
                         ? t("checkout.submitting")
                         : t("checkout.placeOrder")}
                     </Button>
-                    {/* <Button
-                      type="submit"
-                      variant="outline"
-                      size="md"
-                      className="mt-3 w-full"
-                      disabled={isSubmitting}
-                      onClick={() => {
-                        paymentMethodRef.current = "tbcInstalment";
-                        if (isValid) return;
 
-                        setTouched({
-                          name: true,
-                          surname: true,
-                          email: true,
-                          personalId: true,
-                          phone: true,
-                          address: true,
-                          deliveryType: true,
-                        });
-                        toast.error(t("checkout.validation.requiredFieldsToast"));
-                      }}
-                    >
-                      {isSubmitting
-                        ? t("checkout.submitting")
-                        : t("checkout.payWithInstalment")}
-                    </Button> */}
                     {!canPlaceOrder && (
                       <div className="mt-3 rounded-md border border-red-200 bg-red-50 p-3 text-sm text-red-600">
                         {finaIdsToCheck.length > 0 &&
@@ -485,6 +461,49 @@ export default function CheckoutPage({
                     subtotal={subtotal}
                     deliveryPrice={deliveryPrice}
                     totalPrice={totalPrice}
+                    buttonsGroup={
+                      <>
+                        <Button
+                          type="submit"
+                          variant="default"
+                          size="md"
+                          className="mt-3 flex w-full items-center justify-center gap-2 border-0 bg-[#03aeec] text-white hover:bg-[#03aeec]"
+                          disabled={isSubmitting}
+                          onClick={() => {
+                            paymentMethodRef.current = "tbcInstalment";
+                            if (isValid) return;
+
+                            setTouched({
+                              name: true,
+                              surname: true,
+                              email: true,
+                              personalId: true,
+                              phone: true,
+                              address: true,
+                              deliveryType: true,
+                            });
+                            toast.error(
+                              t("checkout.validation.requiredFieldsToast")
+                            );
+                          }}
+                        >
+                          {isSubmitting ? (
+                            t("checkout.submitting")
+                          ) : (
+                            <>
+                              <Image
+                                src="/imgs/tbcll.jpg"
+                                alt="TBC"
+                                width={40}
+                                height={40}
+                                className="h-10 w-10 rounded-sm object-cover"
+                              />
+                              <span>{t("checkout.payWithInstalment")}</span>
+                            </>
+                          )}
+                        </Button>
+                      </>
+                    }
                   />
                 </Form>
               );

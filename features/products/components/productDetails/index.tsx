@@ -1,5 +1,4 @@
 import Breadcrumb from "@/components/ui/breadcrumb";
-import { generateSlug } from "@/lib/utils/slugify";
 import { getTranslations } from "next-intl/server";
 import { headers } from "next/headers";
 import { notFound } from "next/navigation";

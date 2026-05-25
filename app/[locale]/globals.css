@@ -1,23 +1,17 @@
 @import "tailwindcss";
 
-
-
 :root {
   --background: 243 243 243;
   --background-secondary: 238 238 238;
   --foreground: 23 23 23;
   --neutral: 250 250 250;
   --primary: 255 186 0;
-  --dark-secondary-100:26 26 26;
-  --dark-secondary-70:94 94 94;
-  --text-secondary:94 94 94;
+  --dark-secondary-100: 26 26 26;
+  --dark-secondary-70: 94 94 94;
+  --text-secondary: 94 94 94;
   --line-color: 210 210 210;
   --discount-BG: 255 203 203;
-
-
 }
-
-
 
 @theme inline {
   --color-background: rgb(243 243 243);
@@ -37,26 +31,19 @@
   --color-discount-text: rgb(180 0 0);
 }
 
+input:focus {
+  outline: none;
+  box-shadow: none;
+}
 
+body {
+  font-family: var(--font-inter);
+}
 
-  input:focus{
-    outline: none ;
-    box-shadow: none ;
-
-   
-  }
-
-
-  body {
-    font-family: var(--font-inter);
-    
-  }
-
-  .customContainer{
-    max-width: 1300px ;
-    margin-left:  auto ;
-    margin-right:  auto ;
-    padding-left: 15px;
-    padding-right: 15px;
-    
-  }
+.customContainer {
+  max-width: 1300px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 15px;
+  padding-right: 15px;
+}

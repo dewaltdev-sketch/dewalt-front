@@ -5,12 +5,14 @@ type OrderSummaryProps = {
   subtotal: number;
   deliveryPrice: number;
   totalPrice: number;
+  buttonsGroup: React.ReactNode;
 };
 export default function OrderSummary({
   totalItems,
   subtotal,
   deliveryPrice,
   totalPrice,
+  buttonsGroup,
 }: OrderSummaryProps) {
   const t = useTranslations();
   return (
@@ -48,6 +50,15 @@ export default function OrderSummary({
           <span className="text-dark-secondary-100">
             {totalPrice.toLocaleString("ka-GE")} GEL
           </span>
+        </div>
+      </div>
+
+      <div className="mt-4 box-border">
+        <div className="border-line-color rounded-lg border bg-white p-4 md:p-6">
+          <h3 className="text-dark-secondary-100 mb-4 text-sm">
+            {t("checkout.instalmentPayment")}
+          </h3>
+          {buttonsGroup}
         </div>
       </div>
     </div>
