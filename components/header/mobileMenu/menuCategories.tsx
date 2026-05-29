@@ -38,8 +38,11 @@ export default function MenuCategories({
     }
   };
 
-  const brandSlug = brands?.[category]?.slug;
-  const categorySlug = brands?.[category]?.categories?.[category]?.slug;
+  const brandSlug = selectedCategory?.slug;
+  const categorySlug =
+    selectedSubCategory !== null
+      ? selectedCategory?.categories?.[selectedSubCategory]?.slug
+      : undefined;
 
   return (
     <div>
@@ -77,16 +80,16 @@ export default function MenuCategories({
       <div>
         {selectedSubCategory === null && (
           <ul className="ml-1 flex flex-col gap-2">
-            {brands?.[category].categories.map((category, index) => (
+            {selectedCategory?.categories.map((menuCategory, index) => (
               <MenuSubItem
                 key={index}
                 onClick={() => setSelectedSubCategory(index)}
                 parentId={selectedCategory?.name || ""}
-                id={category.toString()}
-                displayName={category.name}
-                hasSubCategories={category.subCategories.length > 0}
+                id={index.toString()}
+                displayName={menuCategory.name}
+                hasSubCategories={menuCategory.subCategories.length > 0}
                 isActive={false}
-                slug={category.slug}
+                slug={menuCategory.slug}
                 brandSlug={brandSlug || ""}
                 closeMenu={() => handleClose(true)}
               />
